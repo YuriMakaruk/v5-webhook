@@ -14,12 +14,6 @@ async function processTransaction(amount, localTime, description) {
     // Accumulate the total amount
     totalAmount += amount;
 
-    // Log the random message with the current amount
-    console.log(`💸 Money is moving: ${amount}!`);
-    console.log(`🔢 Total today's amount: ${totalAmount}`);
-    console.log("Transaction local time:", localTime);
-    console.log("Transaction description:", description);
-
     // Make a POST request to the Telegram API to send the message
     fetch(url, {
         method: 'POST',
