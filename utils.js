@@ -22,7 +22,8 @@ async function processTransaction(amount, localTime, description) {
         },
         body: JSON.stringify({
             chat_id: chatId,
-            text: `Today's total amount is ${totalAmount} UAH.
+            text: `
+            Today's total amount is ${totalAmount} UAH.
             Date and time: ${localTime}.
             Transaction description: ${description}.`
         })
