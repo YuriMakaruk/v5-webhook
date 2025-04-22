@@ -1,4 +1,6 @@
 let totalAmount = 0;
+let dailyTotal = 0; // Total expenses for the current day
+let currentDay = new Date().toISOString().split('T')[0]; // Current day in YYYY-MM-DD format
 
 // The chat ID of the recipient
 const chatId = process.env.CHAT_ID;
@@ -14,6 +16,21 @@ async function processTransaction(amount, localTime, description) {
     // Accumulate the total amount
     totalAmount += amount;
 
+    // Get the transaction date in YYYY-MM-DD format
+    const transactionDate = new Date(localTime).toISOString().split('T')[0];
+
+    // Check if the transaction is for the current day
+    if (transactionDate === currentDay) {
+        // Add the amount to the daily total if it's an expense (negative amount)
+        if (amount < 0) {
+            dailyTotal += amount;
+        }
+    } else {
+        // Reset the daily total and current day if it's a new day
+        currentDay = transactionDate;
+        dailyTotal = amount < 0 ? amount : 0; // Start with the first expense of the new day
+    }
+
     // Make a POST request to the Telegram API to send the message
     fetch(url, {
         method: 'POST',
@@ -23,7 +40,7 @@ async function processTransaction(amount, localTime, description) {
         body: JSON.stringify({
             chat_id: chatId,
             text: `
-            Today's total amount is ${totalAmount} UAH.
+            Today's total expenses are ${Math.abs(dailyTotal)} UAH.
             Date and time: ${localTime}.
             Transaction description: ${description}.`
         })
