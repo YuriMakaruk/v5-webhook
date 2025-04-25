@@ -13,9 +13,6 @@ const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
 
 // Combined function to log a message and send a Telegram message
 async function processTransaction(amount, localTime, description) {
-    // Accumulate the total amount
-    totalAmount += amount;
-
     // Get the transaction date in YYYY-MM-DD format
     const transactionDate = new Date(localTime).toISOString().split('T')[0];
 
@@ -30,6 +27,9 @@ async function processTransaction(amount, localTime, description) {
         currentDay = transactionDate;
         dailyTotal = amount < 0 ? amount : 0; // Start with the first expense of the new day
     }
+
+    // Log the updated daily total
+    console.log(`Updated daily total for ${currentDay}: ${dailyTotal}`);
 
     // Make a POST request to the Telegram API to send the message
     fetch(url, {
@@ -47,7 +47,11 @@ async function processTransaction(amount, localTime, description) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Message sent:', data.result.text);
+            if (data.ok) {
+                console.log('Message sent:', data.result.text);
+            } else {
+                console.error('Telegram API Error:', data.description);
+            }
         })
         .catch(error => {
             console.error('Error:', error);
