@@ -33,31 +33,31 @@ async function performFunction() {
         }
 
         const transactions = await response.json();
-        console.log('Fetched transactions:', transactions);
 
         // Variables for accumulating transaction data
         let total = 0;
-        let descriptions = [];
+        let transactionDetails = [];
         const localTime = new Date().toLocaleTimeString(); // Get the current local time
 
         transactions.forEach(item => {
             // Log each transaction
-            console.log(`Transaction description: ${item.description}, Amount: ${item.amount / 100} UAH`);
+            const amountUAH = item.amount / 100; // Convert the amount to UAH
+            console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
 
             // Sum the amounts
             total += item.amount;
 
-            // Collect transaction descriptions (optional: choose one description or all)
+            // Accumulate descriptions and amounts
             if (item.description) {
-                descriptions.push(item.description);
+                transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
             }
         });
 
-        const totalUAH = total / 100; // Convert to UAH
+        const totalUAH = total / 100; // Convert total to UAH
         console.log('Total amount from all transactions today:', totalUAH.toFixed(2), 'UAH');
 
-        // Prepare the description for Telegram message
-        const descriptionText = descriptions.length > 0 ? descriptions.join(', ') : 'No description available';
+        // Prepare the detailed transaction list for Telegram message
+        const transactionText = transactionDetails.length > 0 ? transactionDetails.join('\n') : 'No transactions found.';
 
         // Send Telegram message
         const telegramResponse = await fetch(url, {
@@ -70,7 +70,8 @@ async function performFunction() {
                 text: `
                 Today's total expenses are ${totalUAH.toFixed(2)} UAH.
                 Date and time: ${localTime}.
-                Transaction descriptions: ${descriptionText}.`
+                Transaction details:
+                ${transactionText}`
             })
         });
 
