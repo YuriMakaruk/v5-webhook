@@ -90,10 +90,14 @@ async function performFunction() {
 app.post('/webhook', async (req, res) => {
     console.log('Received webhook:', req.body);
 
+    // Log the time to see if it's called twice
+    console.log('Webhook received at:', new Date().toLocaleTimeString());
+
     await performFunction(); // Call your async function
 
     res.sendStatus(200);
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
