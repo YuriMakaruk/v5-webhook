@@ -11,15 +11,15 @@ const MONOBANK_TOKEN = process.env.MONOBANK_BOT_TOKEN; // Your Monobank token
 // Your custom function that does a calculation
 async function performFunction() {
     try {
-        const account = process.env.ALLOWED_ACCOUNT; // Your Monobank account ID
-        const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today in UNIX timestamp
-        const toDate = Math.floor(new Date().getTime() / 1000); // Current date in UNIX timestamp
+        const account = process.env.ALLOWED_ACCOUNT;
+        const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
+        const toDate = Math.floor(new Date().getTime() / 1000); // Current date
         const monobankUrl = `https://api.monobank.ua/personal/statement/${account}/${fromDate}/${toDate}`;
 
         const response = await fetch(monobankUrl, {
             method: 'GET',
             headers: {
-                'X-Token': MONOBANK_TOKEN // <<< FIXED THIS LINE
+                'X-Token': MONOBANK_TOKEN
             }
         });
 
@@ -28,20 +28,27 @@ async function performFunction() {
         }
 
         const transactions = await response.json();
-        // console.log('Fetched transactions:', transactions);
+        console.log('Fetched transactions:', transactions);
 
+        // Use forEach to iterate over transactions
+        let total = 0;
 
+        transactions.forEach(item => {
+            // Log each transaction
+            console.log(`Transaction description: ${item.description}, Amount: ${item.amount / 100} UAH`);
 
+            // Sum the amounts
+            total += item.amount;
+        });
 
-        // Example calculation: sum all transaction amounts
-        const total = transactions.reduce((sum, item) => sum + item.amount, 0);
-        const totalUAH = total / 100; // <<< convert kopeks to UAH
-        console.log('Total amount from fetched data:', totalUAH.toFixed(2));
+        const totalUAH = total / 100; // Convert to UAH
+        console.log('Total amount from all transactions today:', totalUAH.toFixed(2), 'UAH');
 
     } catch (error) {
         console.error('Error fetching Monobank data:', error.message);
     }
 }
+
 
 app.post('/webhook', async (req, res) => {
     console.log('Received webhook:', req.body);
