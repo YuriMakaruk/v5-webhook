@@ -28,7 +28,7 @@ async function performFunction() {
         }
 
         const transactions = await response.json();
-        console.log('Fetched transactions:', transactions);
+        // console.log('Fetched transactions:', transactions);
 
         // Example calculation: sum all transaction amounts
         const total = transactions.reduce((sum, item) => sum + item.amount, 0);
