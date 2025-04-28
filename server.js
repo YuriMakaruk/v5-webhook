@@ -30,8 +30,12 @@ async function performFunction() {
         const transactions = await response.json();
         // console.log('Fetched transactions:', transactions);
 
+        // ✅ Filter only transactions where accountId matches
+        const filteredTransactions = transactions.filter(item => item.accountId === account);
+
+
         // Example calculation: sum all transaction amounts
-        const total = transactions.reduce((sum, item) => sum + item.amount, 0);
+        const total = filteredTransactions.reduce((sum, item) => sum + item.amount, 0);
         const totalUAH = total / 100; // <<< convert kopeks to UAH
         console.log('Total amount from fetched data:', totalUAH.toFixed(2));
 
