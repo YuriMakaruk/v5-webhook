@@ -87,16 +87,23 @@ async function performFunction() {
     }
 }
 
-app.post('/webhook', async (req, res) => {
-    console.log('Received webhook:', req.body);
+let isProcessing = false;
 
-    // Log the time to see if it's called twice
-    console.log('Webhook received at:', new Date().toLocaleTimeString());
+app.post('/webhook', async (req, res) => {
+    if (isProcessing) {
+        console.log('Already processing, ignoring duplicate webhook');
+        return res.sendStatus(200);
+    }
+
+    isProcessing = true;
+    console.log('Received webhook:', req.body);
 
     await performFunction(); // Call your async function
 
+    isProcessing = false; // Reset flag after processing
     res.sendStatus(200);
 });
+
 
 
 const PORT = process.env.PORT || 3000;
