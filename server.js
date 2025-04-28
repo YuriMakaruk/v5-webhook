@@ -37,7 +37,10 @@ async function performFunction() {
         // Variables for accumulating transaction data
         let total = 0;
         let transactionDetails = [];
-        const localTime = new Date().toLocaleTimeString(); // Get the current local time
+        const localTime = new Date().toLocaleTimeString('en-US', {
+            timeZone: 'Europe/Kiev', // Set the time zone
+            hour12: false // Optional: use 24-hour format (set to true for 12-hour format)
+        });
 
         transactions.forEach(item => {
             // Log each transaction
