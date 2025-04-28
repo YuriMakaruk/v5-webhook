@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
 
+// If using Node <18, uncomment the next line:
+// const fetch = require('node-fetch');
+
 app.use(express.json());
+
+const MONOBANK_TOKEN = process.env.MONOBANK_BOT_TOKEN; // Your Monobank token
 
 // Your custom function that does a calculation
 async function performFunction() {
@@ -14,7 +19,7 @@ async function performFunction() {
         const response = await fetch(monobankUrl, {
             method: 'GET',
             headers: {
-                'X-Token': process.env.MONOBANK_BOT_TOKEN // Your Monobank token
+                'X-Token': MONOBANK_TOKEN // <<< FIXED THIS LINE
             }
         });
 
