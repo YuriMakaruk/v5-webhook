@@ -1,9 +1,6 @@
 const express = require('express');
 const app = express();
 
-// If using Node <18, uncomment the next line:
-// const fetch = require('node-fetch');
-
 app.use(express.json());
 
 const MONOBANK_TOKEN = process.env.MONOBANK_BOT_TOKEN; // Your Monobank token
