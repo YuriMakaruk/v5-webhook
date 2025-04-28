@@ -34,7 +34,7 @@ async function performFunction() {
 
 
         // Example calculation: sum all transaction amounts
-        const total = filteredTransactions.reduce((sum, item) => sum + item.amount, 0);
+        const total = transactions.reduce((sum, item) => sum + item.amount, 0);
         const totalUAH = total / 100; // <<< convert kopeks to UAH
         console.log('Total amount from fetched data:', totalUAH.toFixed(2));
 
