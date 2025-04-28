@@ -30,9 +30,7 @@ async function performFunction() {
         const transactions = await response.json();
         // console.log('Fetched transactions:', transactions);
 
-        // ✅ Filter only transactions where accountId matches
-        const filteredTransactions = transactions.filter(item => item.accountId === account);
-        console.log('Filtered transactions:', filteredTransactions);
+
 
 
         // Example calculation: sum all transaction amounts
