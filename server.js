@@ -32,7 +32,8 @@ async function performFunction() {
 
         // Example calculation: sum all transaction amounts
         const total = transactions.reduce((sum, item) => sum + item.amount, 0);
-        console.log('Total amount from fetched data:', total);
+        const totalUAH = total / 100; // <<< convert kopeks to UAH
+        console.log('Total amount from fetched data:', totalUAH);
 
     } catch (error) {
         console.error('Error fetching Monobank data:', error.message);
