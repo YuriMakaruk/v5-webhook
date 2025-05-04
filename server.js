@@ -40,16 +40,19 @@ async function performFunction() {
         });
 
         transactions.forEach(item => {
-            // Log each transaction
             const amountUAH = item.amount / 100; // Convert the amount to UAH
-            console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
 
-            // Sum the amounts
-            total += item.amount;
+            // Only process negative amounts (expenses)
+            if (item.amount < 0) {
+                console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
 
-            // Accumulate descriptions and amounts
-            if (item.description) {
-                transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
+                // Sum the negative amounts
+                total += item.amount;
+
+                // Accumulate descriptions and amounts
+                if (item.description) {
+                    transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
+                }
             }
         });
 
