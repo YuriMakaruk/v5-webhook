@@ -152,11 +152,7 @@ async function fetchAccountTwo() {
             },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: `
-        Total expenses for account two are ${totalUAH.toFixed(2)} UAH.
-        Date and time: ${localTime}.
-        Transaction details:
-        ${transactionText}`
+                text: `Total expenses for account two are ${totalUAH.toFixed(2)} UAH. Transaction details: ${transactionText}`
             })
         });
 
