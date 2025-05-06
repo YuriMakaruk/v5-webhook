@@ -108,7 +108,7 @@ async function fetchAccountTwo() {
     }
 
     const transactions = await response.json();
-
+    console.log("--------------------------------------");
     console.log(`transactions for account ${accountTwo}:`, transactions);
 
 
