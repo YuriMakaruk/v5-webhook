@@ -109,31 +109,8 @@ async function fetchAccountTwo() {
 
     const transactions = await response.json();
 
+    console.log(`transactions for account ${accountTwo}:`, transactions);
 
-    // Variables for accumulating transaction data
-    let total = 0;
-    let transactionDetails = [];
-    const localTime = new Date().toLocaleTimeString('en-US', {
-        timeZone: 'Europe/Kiev', // Set the time zone
-        hour12: false // Optional: use 24-hour format (set to true for 12-hour format)
-    });
-
-    transactions.forEach(item => {
-        const amountUAH = item.amount / 100; // Convert the amount to UAH
-
-        // Only process negative amounts (expenses)
-        if (item.amount < 0) {
-            console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
-
-            // Sum the negative amounts
-            total += item.amount;
-
-            // Accumulate descriptions and amounts
-            if (item.description) {
-                transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
-            }
-        }
-    });
 
     const totalUAH = total / 100; // Convert total to UAH
     console.log('Total amount from all transactions today:', totalUAH.toFixed(2), 'UAH');
