@@ -90,6 +90,61 @@ async function performFunction() {
     }
 }
 
+async function fetchAccountTwo() {
+    const accountTwo = process.env.ALLOWED_ACCOUNT_TWO;
+    const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
+    const toDate = Math.floor(new Date().getTime() / 1000); // Current date
+    const monobankUrl = `https://api.monobank.ua/personal/statement/${accountTwo}/${fromDate}/${toDate}`;
+
+    const response = await fetch(monobankUrl, {
+        method: 'GET',
+        headers: {
+            'X-Token': MONOBANK_TOKEN
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Error fetching Monobank data: ${response.status} ${response.statusText}`);
+    }
+
+    const transactions = await response.json();
+
+
+    // Variables for accumulating transaction data
+    let total = 0;
+    let transactionDetails = [];
+    const localTime = new Date().toLocaleTimeString('en-US', {
+        timeZone: 'Europe/Kiev', // Set the time zone
+        hour12: false // Optional: use 24-hour format (set to true for 12-hour format)
+    });
+
+    transactions.forEach(item => {
+        const amountUAH = item.amount / 100; // Convert the amount to UAH
+
+        // Only process negative amounts (expenses)
+        if (item.amount < 0) {
+            console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
+
+            // Sum the negative amounts
+            total += item.amount;
+
+            // Accumulate descriptions and amounts
+            if (item.description) {
+                transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
+            }
+        }
+    });
+
+    const totalUAH = total / 100; // Convert total to UAH
+    console.log('Total amount from all transactions today:', totalUAH.toFixed(2), 'UAH');
+
+    // Prepare the detailed transaction list for Telegram message
+    const transactionText = transactionDetails.length > 0 ? transactionDetails.join('\n') : 'No transactions found.';
+
+
+
+}
+
 let isProcessing = false;
 
 app.post('/webhook', async (req, res) => {
@@ -102,7 +157,7 @@ app.post('/webhook', async (req, res) => {
     console.log('Received webhook:', req.body);
 
     await performFunction(); // Call your async function
-
+    await fetchAccountTwo(); // Call the second async function
     isProcessing = false; // Reset flag after processing
     res.sendStatus(200);
 });
