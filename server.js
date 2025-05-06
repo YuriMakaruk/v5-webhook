@@ -91,25 +91,25 @@ async function performFunction() {
 }
 
 async function fetchAccountTwo() {
-    // const accountTwo = process.env.ALLOWED_ACCOUNT_TWO;
-    // const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
-    // const toDate = Math.floor(new Date().getTime() / 1000); // Current date
-    // const monobankUrl = `https://api.monobank.ua/personal/statement/${accountTwo}/${fromDate}/${toDate}`;
+    const accountTwo = process.env.ALLOWED_ACCOUNT_TWO;
+    const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
+    const toDate = Math.floor(new Date().getTime() / 1000); // Current date
+    const monobankUrl = `https://api.monobank.ua/personal/statement/${accountTwo}/${fromDate}/${toDate}`;
 
-    // const response = await fetch(monobankUrl, {
-    //     method: 'GET',
-    //     headers: {
-    //         'X-Token': MONOBANK_TOKEN
-    //     }
-    // });
+    const response = await fetch(monobankUrl, {
+        method: 'GET',
+        headers: {
+            'X-Token': MONOBANK_TOKEN
+        }
+    });
 
-    // if (!response.ok) {
-    //     throw new Error(`Error fetching Monobank data: ${response.status} ${response.statusText}`);
-    // }
+    if (!response.ok) {
+        throw new Error(`Error fetching Monobank data: ${response.status} ${response.statusText}`);
+    }
 
-    // const transactions = await response.json();
+    const transactions = await response.json();
     console.log("--------------------------------------");
-    console.log(`transactions for accountTwo`);
+    console.log(`transactions for accountTwo: ${accountTwo}: `);
 
 
     // const totalUAH = total / 100; // Convert total to UAH
