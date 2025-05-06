@@ -123,17 +123,20 @@ async function fetchAccountTwo() {
         transactions.forEach(item => {
             const amountUAH = item.amount / 100; // Convert the amount to UAH
 
-            console.log(`Transaction for account two description: ${item.description}, Amount: ${amountUAH} UAH`);
+            // Only process positive amounts
+            if (item.amount > 0) {
+                console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
 
-            // Sum the negative amounts
-            total += item.amount;
+                // Sum the negative amounts
+                total += item.amount;
 
-            // Accumulate descriptions and amounts
-            if (item.description) {
-                transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
+                // Accumulate descriptions and amounts
+                if (item.description) {
+                    transactionDetails.push(`${item.description}: ${amountUAH.toFixed(2)} UAH`);
+                }
             }
-
         });
+
 
         const totalUAH = total / 100; // Convert total to UAH
         console.log('Total amount for account two transactions:', totalUAH.toFixed(2), 'UAH');
