@@ -91,7 +91,7 @@ async function performFunction() {
 }
 
 async function fetchAccountTwo() {
-    const accountTwo = process.env.ALLOWED_ACCOUNT_TWO;
+    const accountTwo = 'Mc7FBjPB_b89Wy6ltJKUUGjnsJh5WGI'; // Your second account ID
     const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
     const toDate = Math.floor(new Date().getTime() / 1000); // Current date
     const monobankUrl = `https://api.monobank.ua/personal/statement/${accountTwo}/${fromDate}/${toDate}`;
