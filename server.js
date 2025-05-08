@@ -93,7 +93,6 @@ async function performFunction() {
 async function fetchAccountTwo() {
     try {
         const accountTwo = process.env.ALLOWED_ACCOUNT_TWO; // Your second account ID
-        // const fromDate = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000); // Start of today
         const fromDate = Math.floor(new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime() / 1000); // Start of the month
         const toDate = Math.floor(new Date().getTime() / 1000); // Current date
         const monobankUrl = `https://api.monobank.ua/personal/statement/${accountTwo}/${fromDate}/${toDate}`;
@@ -127,7 +126,7 @@ async function fetchAccountTwo() {
             if (item.amount > 0) {
                 console.log(`Transaction description: ${item.description}, Amount: ${amountUAH} UAH`);
 
-                // Sum the negative amounts
+                // Sum the positive amounts
                 total += item.amount;
 
                 // Accumulate descriptions and amounts
@@ -136,13 +135,19 @@ async function fetchAccountTwo() {
                 }
             }
         });
-
+        console.log("--------------------------------------transactionDetails--------------------------------------");
+        console.log(transactionDetails);
+        // If there are no new transactions, do not send a message
+        if (transactionDetails.length === 0) {
+            console.log('No new transactions for account two. Skipping Telegram message.');
+            return;
+        }
 
         const totalUAH = total / 100; // Convert total to UAH
         console.log('Total amount for account two transactions:', totalUAH.toFixed(2), 'UAH');
 
         // Prepare the detailed transaction list for Telegram message
-        const transactionText = transactionDetails.length > 0 ? transactionDetails.join('\n') : 'No transactions found.';
+        const transactionText = transactionDetails.join('\n');
 
         // Send Telegram message
         const telegramResponse = await fetch(url, {
@@ -166,8 +171,6 @@ async function fetchAccountTwo() {
     } catch (error) {
         console.error('Error fetching Monobank data:', error.message);
     }
-
-
 }
 
 let isProcessing = false;
