@@ -70,7 +70,9 @@ async function performFunction() {
             },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: `Today's total expenses are ${totalUAH.toFixed(2)} UAH. Date and time: ${localTime}. Transaction details: ${transactionText}`
+                text: `Today's total expenses are ${totalUAH.toFixed(2)} UAH. 
+        Date and time: ${localTime}. 
+        Transaction details: ${transactionText}`
             })
         });
 
